@@ -63,16 +63,6 @@ def get_conversation_chain(vectorstore):
     memory = ConversationBufferMemory(memory_key='chat_history', return_messages=True)
     return ConversationalRetrievalChain.from_llm(llm=llm, retriever=vectorstore.as_retriever(), memory=memory)
 
-# def handle_userinput(user_question):
-#     response = st.session_state.conversation({'question': user_question})
-#     st.session_state.chat_history = response['chat_history']
-
-#     for i, message in enumerate(st.session_state.chat_history):
-#         if i % 2 == 0:
-#             st.write(user_template.replace("{{MSG}}", message.content), unsafe_allow_html=True)
-#         else:
-#             st.write(bot_template.replace("{{MSG}}", message.content), unsafe_allow_html=True)
-
 
 def handle_userinput(user_question):
     response = st.session_state.conversation({'question': user_question})
@@ -87,13 +77,13 @@ def handle_userinput(user_question):
 
 def main():
     api_key = st.secrets["OPENAI_API_KEY"]
-    st.set_page_config(page_title="RAG", page_icon=":shark:")
+    st.set_page_config(page_title="RAG On the Fly ", page_icon=":shark:")
     st.write(css, unsafe_allow_html=True)
 
     if 'conversation' not in st.session_state or st.session_state.conversation is None:
         st.session_state.conversation = None
 
-    st.header("RAG Chatbot with any document or URL :shark:") 
+    st.header("RAG On the Fly with any document / URL :shark:") 
 
     message = st.text_input("Ask a question")
 
@@ -107,7 +97,7 @@ def main():
         docs = st.file_uploader("Upload a document", accept_multiple_files=True)
         url = st.text_input("Enter a URL")
 
-        if st.button("RAG now!"):
+        if st.button("RAG it now !"):
             with st.spinner("Analyzing, Vectorizing, Retrieving..."):
                 raw_text = ""
 
@@ -147,7 +137,7 @@ def main():
                 vectorstore = get_vector_store(text_chunks)
                 st.session_state.conversation = get_conversation_chain(vectorstore)
 
-                st.write("Ready to RAG")
+                st.write("Preparation completed! \n Ask a question in the chatbox to get started.")
 
                 st.subheader("Manual")
                 st.write("1. Upload a PDF, DOCX, or PPTX file or provide a URL for analysis.")
